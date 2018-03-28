@@ -1,0 +1,47 @@
+version: '2'
+
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - '8080:80'
+    volumes:
+      - ./project:/project
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      mikaunet:
+        ipv4_address: 172.26.0.2
+  php:
+    image: php:7-fpm
+    volumes:
+      - ./project:/project
+    networks:
+      mikaunet:
+        ipv4_address: 172.26.0.4
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306"
+    volumes:
+      - mysqldata2:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: virtual_monster
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    networks:
+      mikaunet:
+        ipv4_address: 172.26.0.6
+
+networks:
+  mikaunet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.26.0.0/16
+          gateway: 172.26.0.1
+
+volumes:
+  mysqldata2:
+    driver: local
