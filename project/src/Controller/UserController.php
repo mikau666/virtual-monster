@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -16,7 +17,14 @@ class UserController extends Controller
      */
     public function getAll()
     {
-        $userList = [
+
+        $repo = $this->getDoctrine()
+            ->getRepository(User::class)->findAll();
+
+        var_dump($repo);exit;
+
+        $repository = new UserRepository;
+        $userList   = [
             0 => (object) [
                 'id'        => 1,
                 'firstName' => 'Romulo',
